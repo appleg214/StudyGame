@@ -472,7 +472,7 @@ if (game_state == GAME_STATE_RUN)//游戏状态是正在运行
 	//为下一个画面的动画清除画图表面
     Draw_Rectangle(0,0,SCREEN_WIDTH-1, SCREEN_HEIGHT-1,200);
 
-    // move the paddle
+    // 移动船桨
     if (KEY_DOWN(VK_RIGHT))
        {
        // move paddle to right
@@ -502,14 +502,14 @@ if (game_state == GAME_STATE_RUN)//游戏状态是正在运行
     ball_x+=ball_dx;
     ball_y+=ball_dy;
 
-    // keep ball on screen, if the ball hits the edge of 
-    // screen then bounce it by reflecting its velocity
+    // 让小球在屏幕上，如果小球撞到屏幕边缘keep ball on screen, if the ball hits the edge of 
+    // 反弹它，通过取反速率screen then bounce it by reflecting its velocity
     if (ball_x > (SCREEN_WIDTH - BALL_SIZE) || ball_x < 0) 
        {
-       // reflect x-axis velocity
+       // 反向速率reflect x-axis velocity
        ball_dx=-ball_dx;
 
-       // update position 
+       // 更新位置update position 
        ball_x+=ball_dx;
        } // end if
 
@@ -542,7 +542,7 @@ if (game_state == GAME_STATE_RUN)//游戏状态是正在运行
     else
     if (ball_dx < -8) ball_dx = -8;    
 
-    // test if ball hit any blocks or the paddle
+    // 测试小球是否击中任意块或者船桨test if ball hit any blocks or the paddle
     Process_Ball();
 
     // draw the paddle and shadow

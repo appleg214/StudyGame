@@ -80,9 +80,10 @@ if (DirectDrawCreateEx(NULL, (void **)&lpdd, IID_IDirectDraw7, NULL)!=DD_OK)
 //DDSCL_EXCLUSIVE 表示独占级别
 //DDSCL_FULLSCREEN 表示需要全屏模式。其他程序中的GDI将不允许在屏幕上画图。这个标志必须和DDSCL_EXCLUSIVE 一起使用
 //DDSCL_ALLOWREBOOT 当处于独占（全屏）模式时，允许Ctrl+Alt+Del被检测到
-if (lpdd->SetCooperativeLevel(main_window_handle,
-           DDSCL_ALLOWMODEX | DDSCL_FULLSCREEN | 
-           DDSCL_EXCLUSIVE | DDSCL_ALLOWREBOOT)!=DD_OK)
+//if (lpdd->SetCooperativeLevel(main_window_handle,
+//           DDSCL_ALLOWMODEX | DDSCL_FULLSCREEN | 
+//           DDSCL_EXCLUSIVE | DDSCL_ALLOWREBOOT)!=DD_OK)
+if (lpdd->SetCooperativeLevel(main_window_handle,DDSCL_NORMAL)!=DD_OK)
     return(0);
 
 // 设置显示模式
@@ -94,24 +95,30 @@ screen_height = height;
 screen_width  = width;
 screen_bpp    = bpp;
 
-// Create the primary surface
+// 建立主要界面Create the primary surface
 memset(&ddsd,0,sizeof(ddsd));
 ddsd.dwSize = sizeof(ddsd);
 ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
 
-// we need to let dd know that we want a complex 
-// flippable surface structure, set flags for that
+// 我们必须让DD知道我们需要一个复杂的we need to let dd know that we want a complex 
+// 屏幕可翻转的表面结构，设置标志位flippable surface structure, set flags for that
+//DDSCAPS_PRIMARYSURFACE：主表面 
+//DDSCAPS_FLIP指出这个表面是表面切换结构的一部分。前缓冲区紧跟着一个或多个建立好的后缓冲区
+//DDSCAPS_COMPLEX 是一个复杂表面，由主表面，一个或多个粘贴表面组成，通常是为了页面切换
+//向DirectDraw说明我要创建一个支持翻页的主页面。说明后，就可以创建主页面了CreateSurface
 ddsd.ddsCaps.dwCaps = 
   DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_COMPLEX;
 
-// set the backbuffer count to 1
+// DWORD dwBackBufferCount：后缓冲区的数目设置为1 set the backbuffer count to 1
 ddsd.dwBackBufferCount = 1;
 
-// create the primary surface
+// 创建主界面create the primary surface
 lpdd->CreateSurface(&ddsd,&lpddsprimary,NULL);
 
-// query for the backbuffer i.e the secondary surface
+// 查询后缓冲区，比如说第二个表面query for the backbuffer i.e the secondary surface
+//
 ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
+//创建后备表面的函数、由主表面指针调用、参数二为接收后备表面指针、意为把后备表面加载至主表面
 lpddsprimary->GetAttachedSurface(&ddscaps,&lpddsback);
 
 // create and attach palette
@@ -353,11 +360,11 @@ int Draw_Rectangle(int x1, int y1, int x2, int y2, int color,
                    LPDIRECTDRAWSURFACE7 lpdds)
 {
 // this function uses directdraw to draw a filled rectangle
+//这个函数用来绘制一个封闭的长方形
+DDBLTFX ddbltfx; // 包含了一个DDBLTFX结构
+RECT fill_area;  // 包含了一个目标矩形
 
-DDBLTFX ddbltfx; // this contains the DDBLTFX structure
-RECT fill_area;  // this contains the destination rectangle
-
-// clear out the structure and set the size field 
+// 清除结构并且设置大小域clear out the structure and set the size field 
 DD_INIT_STRUCT(ddbltfx);
 
 // set the dwfillcolor field to the desired color
