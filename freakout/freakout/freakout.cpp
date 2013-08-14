@@ -427,15 +427,15 @@ if (game_state == GAME_STATE_INIT)//游戏状态是初始化
     // 这里初始化所有图形
     DD_Init(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP);
 
-    // seed the random number generator
-    // so game is different each play
-    srand(Start_Clock());
+    // 产生种子到随机数字生成器seed the random number generator
+    // 所以每次玩的时候都不同so game is different each play
+    srand(Start_Clock());//用操作系统启动到现在所经过的毫秒数做种子
 
-    // set the paddle position here to the middle bottom
+    // 设置船桨位置到中下方set the paddle position here to the middle bottom
     paddle_x = PADDLE_START_X;
     paddle_y = PADDLE_START_Y;
 
-    // set ball position and velocity
+    // 设置小球位置和速率set ball position and velocity
     ball_x = 8+rand()%(SCREEN_WIDTH-16);
     ball_y = BALL_START_Y;
     ball_dx = -4 + rand()%(8+1);
@@ -452,12 +452,12 @@ if (game_state == GAME_STATE_START_LEVEL)//游戏状态是开始等级
     // get a new level ready to run
 
     // initialize the blocks
-    Init_Blocks();
+    Init_Blocks();//初始化blocks[][]2维数组
 
     // reset block counter
-    blocks_hit = 0;
+    blocks_hit = 0;//击中数=0
 
-    // transition to run state
+    // 进入运行状态transition to run state
     game_state = GAME_STATE_RUN;
 
     } // end if
@@ -465,10 +465,11 @@ if (game_state == GAME_STATE_START_LEVEL)//游戏状态是开始等级
 else
 if (game_state == GAME_STATE_RUN)//游戏状态是正在运行
     {
-    // start the timing clock
+    // 开始游戏时钟start the timing clock
     Start_Clock();
 
     // clear drawing surface for the next frame of animation
+	//为下一个画面的动画清除画图表面
     Draw_Rectangle(0,0,SCREEN_WIDTH-1, SCREEN_HEIGHT-1,200);
 
     // move the paddle

@@ -304,7 +304,8 @@ return(start_clock_count = Get_Clock());
 
 DWORD Get_Clock(void)
 {
-// this function returns the current tick count
+// GetTickCount返回（retrieve）从操作系统启动到现在所经过（elapsed）的毫秒数，它的返回值是DWORD
+//this function returns the current tick count
 
 // return time
 return(GetTickCount());
